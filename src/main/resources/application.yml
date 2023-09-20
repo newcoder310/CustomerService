@@ -1,0 +1,16 @@
+server:
+  port: 8081
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    platform: h2
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;
+  jpa:
+    defer-datasource-initialization: true
+
+service:
+  uri:
+    accountServiceHostPort: http://localhost:8080
+    transactionServiceHostPort: http://localhost:8080

@@ -1,0 +1,183 @@
+openapi: 3.0.2
+
+info:
+  title: Customer Service API
+  version: 1.0.0
+
+paths:
+  /customer/{customerId}/getDetailedCustomerInformation:
+    get:
+      summary: Retrieve a customer by ID
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CustomerID'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDetailedResponseBody'
+        default:
+          $ref: "#/components/schemas/CustomerServiceError"
+
+  /customer/{customerId}/getCustomerInformation:
+    get:
+      summary: Retrieve a customer by ID
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CustomerID'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponseBody'
+        default:
+          $ref: "#/components/schemas/CustomerServiceError"
+
+  /customer/createCustomer:
+    post:
+      summary: Create a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequestBody'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponseBody'
+
+
+components:
+  schemas:
+    CustomerServiceError:
+      properties:
+        message:
+          type: string
+          description: >
+            Error message with details about the error.
+
+    AccountBalance:
+      type: object
+      required:
+        - balance
+      properties:
+        balance:
+          type: string
+
+    CustomerDetailedResponseBody:
+      type: object
+      required:
+        - customerId
+        - name
+        - surname
+        - balance
+        - transactionResponseBody
+      properties:
+        customerId:
+          allOf:
+            - $ref: '#/components/schemas/CustomerID'
+        name:
+          allOf:
+            - $ref: '#/components/schemas/FirstName'
+        surname:
+          allOf:
+            - $ref: '#/components/schemas/LastName'
+        balance:
+          description: "Total Balance amount."
+          type: string
+        transactionResponseBody:
+          $ref: '#/components/schemas/TransactionResponseBody'
+
+    CustomerRequestBody:
+      type: object
+      required:
+        - name
+        - surname
+      properties:
+        name:
+          $ref: '#/components/schemas/FirstName'
+        surname:
+          $ref: '#/components/schemas/LastName'
+
+    CustomerResponseBody:
+      type: object
+      required:
+        - customerId
+        - name
+        - surname
+      properties:
+        customerId:
+          $ref: '#/components/schemas/CustomerID'
+        name:
+          $ref: '#/components/schemas/FirstName'
+        surname:
+          $ref: '#/components/schemas/LastName'
+
+
+    TransactionResponseBody:
+      type: object
+      required:
+        - transactions
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionResponse'
+
+    TransactionResponse:
+      type: object
+      required:
+        - transactionId
+        - accountId
+        - customerId
+        - amount
+        - date
+      properties:
+        transactionId:
+          description: "Transaction ID"
+          type: string
+        accountId:
+          $ref: '#/components/schemas/AccountID'
+        amount:
+          description: "Transaction Amount"
+          type: string
+        customerId:
+          $ref: '#/components/schemas/CustomerID'
+        date:
+          description: "Date of the transaction"
+          type: string
+          format: date-time
+
+    CustomerID:
+      type: integer
+      format: int64
+      description: "Unique ID of the customer"
+
+    AccountID:
+      type: integer
+      format: int64
+      description: "Unique ID of the account"
+
+    FirstName:
+      type: string
+      description: "First name of the customer"
+
+    LastName:
+      type: string
+      description: "Last name/Surname of the customer"
