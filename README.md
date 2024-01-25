@@ -22,13 +22,13 @@ jobs:
 
   # Create a new directory and copy files to it
   - script: |
-      mkdir -p $(Build.SourcesDirectory)/sourceRepo/src/main/java/com/abn/test/demo
-      cp -r $(Build.SourcesDirectory)/sourceRepo/src/main/java/com/source-repo-path/* $(Build.SourcesDirectory)/sourceRepo/src/main/java/com/abn/test/demo
+      mkdir "$(Build.SourcesDirectory)/sourceRepo/src/main/java/com/abn/test/demo"
+      cp -r "$(Build.SourcesDirectory)/sourceRepo/src/main/java/com/source-repo-path/*" "$(Build.SourcesDirectory)/sourceRepo/src/main/java/com/abn/test/demo/"
     displayName: 'Create Directory and Copy Files'
 
   # Initialize a new Git repository in the artifacts directory
   - script: |
-      cd $(Build.SourcesDirectory)/sourceRepo
+      cd "$(Build.SourcesDirectory)/sourceRepo"
       git init
       git config --global user.email "you@example.com"
       git config --global user.name "Your Name"
@@ -36,12 +36,12 @@ jobs:
 
   # Copy all files from the source repository to the artifacts directory
   - script: |
-      cp -r src/main/java/com/abn/test/demo/* $(Build.SourcesDirectory)/sourceRepo
+      cp -r src/main/java/com/abn/test/demo/* "$(Build.SourcesDirectory)/sourceRepo"
     displayName: 'Copy All Files'
 
   # Commit and push all files to the target repository using a PAT for authentication
   - script: |
-      cd $(Build.SourcesDirectory)/sourceRepo
+      cd "$(Build.SourcesDirectory)/sourceRepo"
       git add .
       git commit -m "Copy all files from source repository"
 
