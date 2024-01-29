@@ -7,6 +7,34 @@ parameters:
     - 'another string'
     # Add more options as needed
 
+jobs:
+- job: AssignVariableBasedOnParameter
+  displayName: 'Assign Variable Based on Parameter'
+  steps:
+  - script: |
+      selectedString="$(selectedString)"
+
+      if [ "$selectedString" == "this is a test string" ]; then
+        echo "Selected string is 'this is a test string'."
+        urlForSelectedString="https://example.com/test-url"
+      elif [ "$selectedString" == "another string" ]; then
+        echo "Selected string is 'another string'."
+        urlForSelectedString="https://example.com/another-url"
+      else
+        echo "Selected string is not recognized."
+      fi
+
+      echo "URL for selected string: $urlForSelectedString"
+    displayName: 'Bash Script'
+parameters:
+- name: selectedString
+  type: string
+  default: 'this is a test string'
+  values:
+    - 'this is a test string'
+    - 'another string'
+    # Add more options as needed
+
 variables:
   urlForSelectedString: ''
 
