@@ -26,6 +26,37 @@ jobs:
       }
     env:
       selectedString: $(selectedString)
+    displayName: 'PowerShell Script'
+
+
+parameters:
+- name: selectedString
+  type: string
+  default: 'this is a test string'
+  values:
+    - 'this is a test string'
+    - 'another string'
+    # Add more options as needed
+
+variables:
+  urlForSelectedString: ''
+
+jobs:
+- job: AssignVariableBasedOnParameter
+  displayName: 'Assign Variable Based on Parameter'
+  steps:
+  - powershell: |
+      if ("$(selectedString)" -eq 'this is a test string') {
+        Write-Host "Selected string is 'this is a test string'."
+        Write-Host "##vso[task.setvariable variable=urlForSelectedString]https://example.com/test-url"
+      } elseif ("$(selectedString)" -eq 'another string') {
+        Write-Host "Selected string is 'another string'."
+        Write-Host "##vso[task.setvariable variable=urlForSelectedString]https://example.com/another-url"
+      } else {
+        Write-Host "Selected string is not recognized."
+      }
+    env:
+      selectedString: $(selectedString)
 
 
 
